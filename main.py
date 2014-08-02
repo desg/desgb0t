@@ -112,13 +112,30 @@ class IRC_Client(object):
 def commandparser(ircclientinstance,serverbuffer):
 	serverbuffer = string.split(string.rstrip(serverbuffer.lower()))
 
-	if len(serverbuffer) >= 4:
+	if len(serverbuffer) >= 4 and serverbuffer[1] == 'privmsg':
 		map(lambda command: command(ircclientinstance,serverbuffer),plugins)
 
+
+# TODO: config file? maybe
 mybot = IRC_Client('irc.freenode.net',['swaglorde','swaglordeh'],
 					'swaglordeh','swaglordeh',['#dtest'])
 
-def startbot(ircclientinstance):
+def logger(ircclientinstance,serverbuffer):
+	serverbuffer = string.split(string.rstrip(serverbuffer))
+
+	if serverbuffer[1].lower() == "privmsg":
+		if serverbuffer[2] in ircclientinstance.ircchanlist:
+			filename = ("%s.log" % serverbuffer[2])
+			f = open(filename, 'a+')
+			f.write("<%s>%s\n" % (ircclientinstance.getusernick(serverbuffer),ircclientinstance.getusermessage(serverbuffer)))
+			f.close()
+		else:
+			filename = ("%s.log" % ircclientinstance.getusernick(serverbuffer))
+			f = open(filename, 'a+')
+			f.write("<%s>%s\n" % (ircclientinstance.getusernick(serverbuffer),ircclientinstance.getusermessage(serverbuffer)))
+			f.close()
+
+def startbot(ircclientinstance,logging=True):
 	ircclientinstance.connect()
 	readbuffer = ""
 	while 1:
@@ -128,6 +145,7 @@ def startbot(ircclientinstance):
 		for line in temp:
 			ircclientinstance.serverreplies(line)
 			commandparser(ircclientinstance,line)
+			logger(ircclientinstance,line)
 			print line
 
 startbot(mybot)
