@@ -58,8 +58,22 @@ class IRC_Client(object):
 	def joinchannel(self,channel):
 		self.sock.send("JOIN %s\r\n" % channel)
 
-	def getquerynick(self,serverbuffer):
-		pass
+	def getusernick(self,serverbuffer):
+		usernick = serverbuffer[0].split("!")
+		usernick = usernick[0].replace(":", "")
+		return usernick
+
+	def getusermessage(self,serverbuffer):
+		message = ""
+		if len(serverbuffer) >=4:
+			serverbuffer[3] == serverbuffer[3][1:]
+			for i in range(3,len(serverbuffer)):
+				message += serverbuffer[i] + " "
+			return message
+
+	def getchannel(self,serverbuffer):
+		if len(serverbuffer):
+			return serverbuffer[2]
 
 	def serverreplies(self,serverbuffer):
 		serverbuffer = string.split(string.rstrip(serverbuffer))
