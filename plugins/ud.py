@@ -25,6 +25,7 @@ def lookup_number(word, number=1, page=1):
 	return definitions[number-1]
 	
 def lookup_abs_number(word, number=1):
+	word = word.replace(" ", "+")
 	page = number//7 + 1
 	number = number%7
 	return lookup_number(word, number, page)
@@ -46,9 +47,10 @@ def ud(ircclientinstance,serverbuffer):
 	else:
 		if commandarguements[-3] == '#':
 			commandarguements = commandarguements.split()
+
 			try:
-				number = int(commandarguements[1][1:])
-				definition = lookup_abs_number(commandarguements[0],number)
+				number = int(commandarguements[-1][1:])
+				definition = lookup_abs_number(" ".join(commandarguements[:-1]),number)
 				output.append("[\x033UD\x03]: '\x033%s\x03' %s" % (definition['word'],definition['definition']))
 				output.append("[\x033Example\x03]: %s" % definition['example'])
 			except:
