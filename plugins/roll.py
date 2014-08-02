@@ -14,8 +14,6 @@ def roll(ircclientinstance,serverbuffer):
 						if serverbuffer[2] in ircclientinstance.ircchanlist:
 							ircclientinstance.sendmessage(serverbuffer[2],output)
 						else:
-							sendernick = serverbuffer[0].split("!")
-							sendernick = sendernick.replace(":","")
-							ircclientinstance.sendmessage(sendernick,output)
+							ircclientinstance.sendmessage(ircclientinstance.getusernick(serverbuffer),output)
 			else:
-				ircclientinstance.sendnotice(serverbuffer[2],output)
+				ircclientinstance.sendnotice(ircclientinstance.getusernick(serverbuffer),output)
