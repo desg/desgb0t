@@ -27,7 +27,7 @@ def kevv(ircclientinstance,serverbuffer):
 	
 	# TODO: programatically get filenamesup
 	#filename = "%s.log" % ircclientinstance.getchannel(serverbuffer)
-	filename = "#dtest.log"
+	filename = "#jeff.log"
 	commandarguements = ""
 
 	parseargs = serverbuffer[3:][1:]
@@ -38,7 +38,7 @@ def kevv(ircclientinstance,serverbuffer):
 	if commandarguements == '':
 		name = choseRandomName(filename)
 	else:
-		name = commandarguements
+		name = commandarguements.strip()
 	
 	listLog = getListLog(filename)
 	templist = []
@@ -50,7 +50,7 @@ def kevv(ircclientinstance,serverbuffer):
 		randomLine = random.choice(templist)
 		output = randomLine.replace(":", " ")
 	else:
-		output = "None"
+		output = None
 
 	if serverbuffer[3][2:] == commandname:
 		if serverbuffer[3][:2] in commands:
