@@ -113,6 +113,9 @@ def commandparser(ircclientinstance,serverbuffer):
 	serverbuffer = string.split(string.rstrip(serverbuffer.lower()))
 
 	if len(serverbuffer) >= 4 and serverbuffer[1] == 'privmsg':
+	if (len(serverbuffer) >= 4 and serverbuffer[1] == 'privmsg' and 
+		(serverbuffer[3].startswith(":@") or serverbuffer[3].startswith(":.") or 
+		serverbuffer[3].startswith(":!"))):
 		map(lambda command: command(ircclientinstance,serverbuffer),plugins)
 
 
