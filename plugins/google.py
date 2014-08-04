@@ -31,7 +31,7 @@ def lookup(search):
 
 def google(ircclientinstance,serverbuffer):
 	commandname = 'google'
-	commands = {':!' : True, ':.' : False, ':@' : True}
+	commands = {':!' : True, ':.' : False, ':@' : False}
 	commandarguements = ""
 
 	parseargs = serverbuffer[3:][1:]
@@ -44,7 +44,7 @@ def google(ircclientinstance,serverbuffer):
 	else:
 		try:
 			searchurl = lookup(commandarguements)[0]['url']
-			output = "[\x033Google\x03]: Top google result for \"\x033%s\x03\": %s \r\n" % (commandarguements.strip(),searchurl)
+			output = "[\x033Google\x03]: Top google result for \"\x033%s\x03\": %s" % (commandarguements.strip(),searchurl)
 		except:
 			output = '[\x033Google\x03]: No info found :3 for "\x033%s\x03"' % commandarguements.strip()
 
