@@ -45,16 +45,18 @@ def ud(ircclientinstance,serverbuffer):
 	if commandarguements == '':
 		output.append(notfound)
 	else:
-		if commandarguements[-3] == '#':
-			commandarguements = commandarguements.split()
+		if "#" in commandarguements:
 
+			commandarguements = commandarguements.strip()
 			try:
-				number = int(commandarguements[-1][1:])
-				definition = lookup_abs_number(" ".join(commandarguements[:-1]),number)
+				number = int(commandarguements[-1])
+				definition = lookup_abs_number(commandarguements[:-1],number)
 				output.append("[\x033UD\x03]: '\x033%s\x03' %s" % (definition['word'],definition['definition']))
 				output.append("[\x033Example\x03]: %s" % definition['example'])
 			except:
-				output.append(notfound)
+				definition = lookup_abs_number(commandarguements)
+				output.append("[\x033UD\x03]: '\x033%s\x03' %s" % (definition['word'],definition['definition']))
+				output.append("[\x033Example\x03]: %s" % definition['example'])
 		else:
 			try:
 				definition = lookup_abs_number(commandarguements)
