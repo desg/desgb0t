@@ -1,28 +1,31 @@
 from datetime import date
 
-def dtc(ircclientinstance,serverbuffer):
-	commandname = 'dtc'
-	commands = {':!' : True, ':.' : False, ':@' : True}
 
-	today = date.today()
-	christmas = date(today.year, 12, 25)
+def dtc(ircclientinstance, serverbuffer):
+    commandname = 'dtc'
+    commands = {':!': True, ':.': False, ':@': True}
 
-	if christmas < today:
-		christmas = christmas.replace(year=today.year + 1)
+    today = date.today()
+    christmas = date(today.year, 12, 25)
 
-	tUntilChristmas = abs(christmas - today)
+    if christmas < today:
+        christmas = christmas.replace(year=today.year + 1)
 
-	output = "%i days until Christmas!" % tUntilChristmas.days
+    tUntilChristmas = abs(christmas - today)
 
-	if serverbuffer[3][2:] == commandname:
-		if serverbuffer[3][:2] in commands:
-			notice = commands.get(serverbuffer[3][:2])
+    output = "%i days until Christmas!" % tUntilChristmas.days
 
-			if not notice:
-				if serverbuffer[1] == "privmsg":
-						if serverbuffer[2] in ircclientinstance.ircchanlist:
-							ircclientinstance.sendmessage(serverbuffer[2],output)
-						else:
-							ircclientinstance.sendmessage(ircclientinstance.getusernick(serverbuffer),output)
-			else:
-				ircclientinstance.sendnotice(ircclientinstance.getusernick(serverbuffer),output)
+    if serverbuffer[3][2:] == commandname:
+        if serverbuffer[3][:2] in commands:
+            notice = commands.get(serverbuffer[3][:2])
+
+            if not notice:
+                if serverbuffer[1] == "privmsg":
+                    if serverbuffer[2] in ircclientinstance.ircchanlist:
+                        ircclientinstance.sendmessage(serverbuffer[2], output)
+                    else:
+                        ircclientinstance.sendmessage(
+                            ircclientinstance.getusernick(serverbuffer), output)
+            else:
+                ircclientinstance.sendnotice(
+                    ircclientinstance.getusernick(serverbuffer), output)

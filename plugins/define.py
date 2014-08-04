@@ -1,5 +1,6 @@
 from wordnik import *
 
+
 def dictdefine(word):
     replacedword = word.strip()
     apiUrl = 'http://api.wordnik.com/v4'
@@ -11,38 +12,42 @@ def dictdefine(word):
 
     return dictdefined
 
-def define(ircclientinstance,serverbuffer):
-	commandname = 'define'
-	commands = {':!' : False, ':.' : False, ':@' : False}
-	output = []
-	notfound = "No info found :3"
-	commandarguements = ""
-	parseargs = serverbuffer[3:][1:]
 
-	for x in parseargs:
-		commandarguements += x.strip() + " "
+def define(ircclientinstance, serverbuffer):
+    commandname = 'define'
+    commands = {':!': False, ':.': False, ':@': False}
+    output = []
+    notfound = "No info found :3"
+    commandarguements = ""
+    parseargs = serverbuffer[3:][1:]
 
-	if commandarguements == '':
-		output.append(notfound)
-	else:
-		try:
-			dcontents = dictdefine(commandarguements)
-			output.append("[\x033Define\x03]: %s" % dcontents[0].text)
-		except:
-			output.append(notfound)
+    for x in parseargs:
+        commandarguements += x.strip() + " "
 
-	if serverbuffer[3][2:] == commandname:
-		if serverbuffer[3][:2] in commands:
-			notice = commands.get(serverbuffer[3][:2])
+    if commandarguements == '':
+        output.append(notfound)
+    else:
+        try:
+            dcontents = dictdefine(commandarguements)
+            output.append("[\x033Define\x03]: %s" % dcontents[0].text)
+        except:
+            output.append(notfound)
 
-			if not notice:
-				if serverbuffer[1] == "privmsg":
-						if serverbuffer[2] in ircclientinstance.ircchanlist:
-							for line in output:
-								ircclientinstance.sendmessage(serverbuffer[2],line)
-						else:
-							for line in output:
-								ircclientinstance.sendmessage(ircclientinstance.getusernick(serverbuffer),output)
-			else:
-				for line in output:
-					ircclientinstance.sendnotice(ircclientinstance.getusernick(serverbuffer),output)
+    if serverbuffer[3][2:] == commandname:
+        if serverbuffer[3][:2] in commands:
+            notice = commands.get(serverbuffer[3][:2])
+
+            if not notice:
+                if serverbuffer[1] == "privmsg":
+                    if serverbuffer[2] in ircclientinstance.ircchanlist:
+                        for line in output:
+                            ircclientinstance.sendmessage(
+                                serverbuffer[2], line)
+                    else:
+                        for line in output:
+                            ircclientinstance.sendmessage(
+                                ircclientinstance.getusernick(serverbuffer), output)
+            else:
+                for line in output:
+                    ircclientinstance.sendnotice(
+                        ircclientinstance.getusernick(serverbuffer), output)
