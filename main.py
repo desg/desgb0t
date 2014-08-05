@@ -14,7 +14,6 @@ for f in os.listdir(path):
         plugins.append(getattr(mod, fname))
 sys.path.pop(0)
 
-
 class IRC_Client(object):
 
     """docstring for IRC_Client"""
@@ -98,6 +97,12 @@ class IRC_Client(object):
             for channel in self.ircchanlist:
                 self.joinchannel(channel)
 
+    def commandparser(self, line):
+        line = string.split(string.rstrip(line.lower()))
+        if (len(line) >= 4 and line[1] == 'privmsg'):
+            map(lambda command: command(self, line), plugins)
+
+
     def connect(self):
         self.createconnection()
         self.setnick(self.ircnicklist[0])
@@ -112,21 +117,23 @@ class IRC_Client(object):
         for channel in self.ircchanlist:
             self.joinchannel(channel)
 
-    def loop():
-        pass
+    def loop(self):
 
+        readbuffer = ""
+        while 1:
+            readbuffer = self.sock.recv(1024)
+            temp = string.split(readbuffer, "\n")
+            readbuffer = temp.pop()
+            for line in temp:
+                print line
+                self.serverreplies(line)
+                self.commandparser(line)
+                logger(self, line)
 
-def commandparser(ircclientinstance, serverbuffer):
+    def runclient(self):
 
-    serverbuffer = string.split(string.rstrip(serverbuffer.lower()))
-
-    if (len(serverbuffer) >= 4 and serverbuffer[1] == 'privmsg' and
-        (serverbuffer[3].startswith(":@") or serverbuffer[3].startswith(":.")
-            or serverbuffer[3].startswith(":!"))):
-        map(lambda command: command(ircclientinstance, serverbuffer), plugins)
-
-
-# TODO: config file? maybe
+        self.connect()
+        self.loop()
 
 
 def logger(ircclientinstance, serverbuffer):
@@ -148,20 +155,8 @@ def logger(ircclientinstance, serverbuffer):
             f.close()
 
 
-def startbot(ircclientinstance, logging=True):
-
-    ircclientinstance.connect()
-    readbuffer = ""
-    while 1:
-
-        readbuffer += ircclientinstance.sock.recv(1024)
-        temp = string.split(readbuffer, "\n")
-        readbuffer = temp.pop()
-        for line in temp:
-
-            ircclientinstance.serverreplies(line)
-            commandparser(ircclientinstance, line)
-            logger(ircclientinstance, line)
-            print line
-
-startbot(mybot)
+if __name__ == "__main__":
+    # TODO: config file? maybe
+    mybot = IRC_Client('irc.freenode.net', ['swaglorde', 'swaglordeh'], 'swaglorde', 
+                    'swaglorde', ['#dtest'])
+    mybot.runclient()
