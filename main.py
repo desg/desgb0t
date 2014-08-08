@@ -35,7 +35,7 @@ class IRC_Client(object):
         self.ircport = ircport
         self.nickpassword = nickpassword
 
-    def createconnection(self):
+    def create_connection(self):
         self.sock = socket.socket()
         self.sock.connect((self.ircserver, self.ircport))
 
@@ -43,7 +43,7 @@ class IRC_Client(object):
         sent = "PRIVMSG %s :%s\r\n" % (sender, message)
         self.sock.send(sent)
 
-    def sendpong(self, sender):
+    def send_pong(self, sender):
         sent = "PONG %s\r\n" % sender
         self.sock.send(sent)
 
@@ -59,7 +59,7 @@ class IRC_Client(object):
 
     def joinchannel(self, channel):
         self.sock.send("JOIN %s\r\n" % channel)
-
+    
     def getusernick(self, serverbuffer):
         usernick = serverbuffer[0].split("!")
         usernick = usernick[0].replace(":", "")
@@ -78,24 +78,16 @@ class IRC_Client(object):
             return serverbuffer[2]
 
     def serverreplies(self, serverbuffer):
-        serverbuffer = string.split(string.rstrip(serverbuffer))
-
-        if serverbuffer[0].lower() == 'ping':
-            self.sendpong(serverbuffer[0])
-        if serverbuffer[1] == "431":
-            print "No nick was given"
-            exit()
-        if serverbuffer[1] == "432":
-            print "Erroneus nick"
-            exit()
-        if serverbuffer[1] == "433":
-            if len(self.ircnicklist) != 0:
-                self.setnick(self.ircnicklist.pop())
-            else:
-                raise IndexError("All nicks from nicklist are in use")
-
-            for channel in self.ircchanlist:
-                self.joinchannel(channel)
+        serverbuffer = tuple(string.split(string.rstrip(serverbuffer)))
+        serv_responses = {"431": "ERR_NONICKNAMEGIVEN",
+                        "432": "ERR_ERRONEUSNICKNAME",
+                        "433": "ERR_NICKNAMEINUSE",
+                        "442": "ERR_NOTONCHANNEL"}
+        if serverbuffer != ():
+            if serverbuffer[0] == "PING":
+                self.send_pong(serverbuffer[0])
+            elif serverbuffer in serv_responses:
+                print serverbuffer
 
     def commandparser(self, line):
         line = string.split(string.rstrip(line.lower()))
@@ -104,14 +96,12 @@ class IRC_Client(object):
 
 
     def connect(self):
-        self.createconnection()
+        self.create_connection()
         self.setnick(self.ircnicklist[0])
         self.sock.send("USER %s %s bla :%s\r\n"
                        % (self.ircident, self.ircserver, self.ircrealname))
 
-        if not self.nickpassword:
-            pass
-        else:
+        if self.nickpassword:
             self.sock.send("PASS %s\r\n" % self.nickpassword)
 
         for channel in self.ircchanlist:
@@ -157,6 +147,6 @@ def logger(ircclientinstance, serverbuffer):
 
 if __name__ == "__main__":
     # TODO: config file? maybe
-    mybot = IRC_Client('irc.freenode.net', ['swaglorde', 'swaglordeh'], 'swaglorde', 
+    mybot = IRC_Client('irc.swiftirc.net', ['swaglord', 'swaglordeh'], 'swaglorde', 
                     'swaglorde', ['#dtest'])
-    mybot.runclient()
+    mybot.run_client()

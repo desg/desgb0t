@@ -23,8 +23,6 @@ def googlelookup(search):
         return None
 
 # use this
-# datetime.timedelta(0, 101)
-
 
 def youtube(ircclientinstance, serverbuffer):
     commandname = ['yt', 'youtube']
