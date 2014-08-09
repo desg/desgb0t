@@ -110,7 +110,7 @@ class IRC_Client(object):
     def loop(self):
 
         readbuffer = ""
-        while 1:
+        while True:
             readbuffer = self.sock.recv(1024)
             temp = string.split(readbuffer, "\n")
             readbuffer = temp.pop()
@@ -133,16 +133,16 @@ def logger(ircclientinstance, serverbuffer):
     if serverbuffer[1].lower() == "privmsg":
         if serverbuffer[2] in ircclientinstance.ircchanlist:
             filename = ("%s.log" % serverbuffer[2])
-            f = open(filename, 'a+')
-            f.write("<%s>%s\n" % (ircclientinstance.getusernick(
-                serverbuffer), ircclientinstance.getusermessage(serverbuffer)))
-            f.close()
+            with open(filename, 'a+') as f:
+                f.write("<%s>%s\n"
+                % (ircclientinstance.getusernick(serverbuffer),
+                    ircclientinstance.getusermessage(serverbuffer))) 
         else:
             filename = ("%s.log" % ircclientinstance.getusernick(serverbuffer))
-            f = open(filename, 'a+')
-            f.write("<%s>%s\n" % (ircclientinstance.getusernick(
-                serverbuffer), ircclientinstance.getusermessage(serverbuffer)))
-            f.close()
+            with open(filename, 'a+') as f:
+                f.write("<%s>%s\n"
+                % (ircclientinstance.getusernick(serverbuffer),
+                    ircclientinstance.getusermessage(serverbuffer)))
 
 
 if __name__ == "__main__":

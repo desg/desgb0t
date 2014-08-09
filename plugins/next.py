@@ -19,7 +19,7 @@ def showInfo(tvname):
 
 def next(ircclientinstance, serverbuffer):
     commandname = 'next'
-    commands = {':!': True, ':.': False, ':@': True}
+    commands = {':!': True, ':.': False, ':@': False}
 
     # This needs to be included in all programs that take arguements
     commandarguements = ""

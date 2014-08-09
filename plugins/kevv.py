@@ -29,7 +29,7 @@ def choseRandomName(filename):
 
 def kevv(ircclientinstance, serverbuffer):
     commandname = 'kevv'
-    commands = {':!': True, ':.': False, ':@': True}
+    commands = {':!': True, ':.': False, ':@': False}
 
     # TODO: programatically get filenamesup
     #filename = "%s.log" % ircclientinstance.getchannel(serverbuffer)

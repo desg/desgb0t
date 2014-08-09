@@ -2,7 +2,7 @@
 
 def trole(ircclientinstance,serverbuffer):
 	commandname = 'trole'
-	commands = {':!' : True, ':.' : False, ':@' : True}
+	commands = {':!' : True, ':.' : False, ':@' : False}
 	output = "( ͡° ͜ʖ ͡°)"
 
 	if serverbuffer[3][2:] == commandname:

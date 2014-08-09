@@ -1,6 +1,6 @@
 def test(ircclientinstance, serverbuffer):
     commandname = 'test'
-    commands = {':!': True, ':.': False, ':@': True}
+    commands = {':!': True, ':.': False, ':@': False}
     output = "test"
 
     if serverbuffer[3][2:] == commandname:
