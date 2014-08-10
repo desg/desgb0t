@@ -21,7 +21,7 @@ def getbwotd():
     elif wotd[0] == 'define':
         dcontents = dictdefine("".join(word))
         if dcontents != None:
-            this = "[\x033Define\x03]: '\x033%s\x03' %s" % ("".join(word), dcontents[0].text) 
+            this = "[\x033Define\x03]: '\x033%s\x03' %s" % ("".join(word), dcontents[0].text.encode('utf-8')) 
             return this
         return 'Word set not found'
     return 'test'

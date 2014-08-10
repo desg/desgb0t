@@ -54,24 +54,24 @@ def ud(ircclientinstance, serverbuffer):
         # find another way to extract the number
         if "#" in commandarguements:
 
-            commandarguements = commandarguements.strip()
+            commandarguements = commandarguements.strip().encode('utf-8')
             try:
                 number = int(commandarguements[-1])
                 definition = lookup_abs_number(commandarguements[:-1], number)
                 output.append("[\x033UD\x03]: '\x033%s\x03' %s" %
-                              (definition['word'], definition['definition']))
-                output.append("[\x033Example\x03]: %s" % definition['example'])
+                              (definition['word'], definition['definition'].encode('utf-8')))
+                output.append("[\x033Example\x03]: %s" % definition['example'].encode('utf-8'))
             except:
                 definition = lookup_abs_number(commandarguements)
                 output.append("[\x033UD\x03]: '\x033%s\x03' %s" %
-                              (definition['word'], definition['definition']))
-                output.append("[\x033Example\x03]: %s" % definition['example'])
+                              (definition['word'], definition['definition'].encode('utf-8')))
+                output.append("[\x033Example\x03]: %s" % definition['example'].encode('utf-8'))
         else:
             try:
                 definition = lookup_abs_number(commandarguements)
                 output.append("[\x033UD\x03]: '\x033%s\x03' %s" %
-                              (definition['word'], definition['definition']))
-                output.append("[\x033Example\x03]: %s" % definition['example'])
+                              (definition['word'], definition['definition'].encode('utf-8')))
+                output.append("[\x033Example\x03]: %s" % definition['example'].encode('utf-8'))
             except:
                 output.append(notfound)
 

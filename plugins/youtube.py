@@ -15,7 +15,7 @@ def googlelookup(search):
         for entry in data:
             searchresults.append({'title': entry['title']['$t'].encode('utf-8'),
                                   'link': entry['link'][0]['href'],
-                                  'author': entry['author'][0]['name']['$t'],
+                                  'author': entry['author'][0]['name']['$t'].encode('utf-8'),
                                   'duration': entry['media$group']['yt$duration']['seconds'],
                                   'views': entry['yt$statistics']['viewCount']})
         return searchresults
