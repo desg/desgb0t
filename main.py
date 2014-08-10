@@ -114,6 +114,7 @@ class IRC_Client(object):
             readbuffer = self.sock.recv(1024)
             temp = string.split(readbuffer, "\n")
             readbuffer = temp.pop()
+            readbuffer = temp.pop().encode('utf-8')
             for line in temp:
                 print line
                 self.serverreplies(line)
