@@ -83,15 +83,14 @@ class IRC_Client(object):
                         "432": "ERR_ERRONEUSNICKNAME",
                         "433": "ERR_NICKNAMEINUSE",
                         "442": "ERR_NOTONCHANNEL"}
-        if serverbuffer != ():
-            if serverbuffer[0] == "PING":
-                self.send_pong(serverbuffer[0])
-            elif serverbuffer in serv_responses:
-                print serverbuffer
+        if serverbuffer[0] == "PING":
+            self.send_pong(serverbuffer[0])
+
 
     def commandparser(self, line):
         line = string.split(string.rstrip(line.lower()))
-        if (len(line) >= 4 and line[1] == 'privmsg'):
+        if (len(line) >= 4 and line[1] == 'privmsg') and (line[3].startswith(':@')
+            or line[3].startswith(':!') or line[3].startswith(':.')):
             map(lambda command: command(self, line), plugins)
 
 

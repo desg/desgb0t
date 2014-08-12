@@ -29,7 +29,7 @@ def define(ircclientinstance, serverbuffer):
     else:
         try:
             dcontents = dictdefine(commandarguements)
-            output.append("[\x033Define\x03]: %s" % dcontents[0].text)
+            output.append("[\x033Define\x03]: %s" % dcontents[0].text.encode('utf-8'))
         except:
             output.append(notfound)
 
